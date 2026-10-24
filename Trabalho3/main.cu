@@ -102,6 +102,8 @@ bool salvarMatriz(const char* nomeArquivo,
     return static_cast<bool>(arquivo);
 }
 
+
+
 int main() {
     std::vector<float> A, B, C;
     int NA = 0, NB = 0;
@@ -162,14 +164,19 @@ int main() {
     CUDA_CHECK(cudaMemcpy(
         C.data(), d_C, bytes, cudaMemcpyDeviceToHost));
 
-    if (!salvarMatriz("C_cuda.txt", C, N)) {
-        return EXIT_FAILURE;
-    }
-
+    
     std::cout << "Multiplicacao concluida.\n";
     std::cout << "Tempo do kernel: "
-              << elapsed_ms << " ms\n";
-    std::cout << "Resultado salvo em C_cuda.txt\n";
+            << elapsed_ms << " ms\n";
+
+    std::cout << "\nMatriz resultante C = A x B:\n";
+
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            std::cout << C[i * N + j] << "\t";
+        }
+        std::cout << '\n';
+}
 
 
     CUDA_CHECK(cudaEventDestroy(start));
